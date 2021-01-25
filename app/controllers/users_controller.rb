@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    json_response(@user)
+    json_response(@user, :ok, user_includes)
   end
 
   def update
@@ -35,5 +35,9 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def user_includes
+    [:tasks]
   end
 end
