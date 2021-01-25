@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Teams API', type: :request do
-  #init test data
+  # init test data
   let!(:teams) { create_list(:team, 10) }
   let(:team_id) { teams.first.id }
 
@@ -21,7 +23,7 @@ RSpec.describe 'Teams API', type: :request do
 
   # Test suite for GET /teams/:id
   describe 'GET /teams/:id' do
-    let!(:team) { {id: 1, name: "my_team", users: create_list(:user, 2)} }
+    let!(:team) { { id: 1, name: 'my_team', users: create_list(:user, 2) } }
     before { get "/teams/#{team_id}" }
 
     context 'when the record exists' do
@@ -40,7 +42,7 @@ RSpec.describe 'Teams API', type: :request do
   # Test suite for POST /teams
   describe 'POST /teams' do
     # valid payload
-    let(:valid_attributes) { { name: 'my_team', users: create_list(:user, 10)} }
+    let(:valid_attributes) { { name: 'my_team', users: create_list(:user, 10) } }
 
     context 'when the request is valid' do
       before { post '/teams', params: valid_attributes }
@@ -48,7 +50,6 @@ RSpec.describe 'Teams API', type: :request do
       it 'creates a team with name' do
         expect(json[:name]).to eq('my_team')
       end
-
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -64,11 +65,10 @@ RSpec.describe 'Teams API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-            .to match(/Validation failed: Name can't be blank/)
+          .to match(/Validation failed: Name can't be blank/)
       end
     end
   end
-
 
   # Test suite for PUT /teams/:id
   describe 'PUT /teams/:id' do

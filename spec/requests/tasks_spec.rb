@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Tasks API', type: :request do
-  #init test data
+  # init test data
   let(:tasks) { create_list(:task, 10) }
   let(:task_id) { tasks.first.id }
 
@@ -21,7 +23,7 @@ RSpec.describe 'Tasks API', type: :request do
 
   # Test suite for GET /tasks/:id
   describe 'GET /tasks/:id' do
-    before { get '/tasks/#{task_id}' }
+    before { get "/tasks/#{task_id}" }
 
     context 'when the record exists' do
       it 'returns the task' do
@@ -38,7 +40,7 @@ RSpec.describe 'Tasks API', type: :request do
   # Test suite for POST /tasks
   describe 'POST /tasks' do
     # valid payload
-    let(:valid_attributes) { { description: 'my_task', status: 'to-do'} }
+    let(:valid_attributes) { { description: 'my_task', status: 'to-do' } }
 
     context 'when the request is valid' do
       before { post '/tasks', params: valid_attributes }
@@ -62,15 +64,14 @@ RSpec.describe 'Tasks API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-            .to match(/Validation failed: Description and Status can't be blank/)
+          .to match(/Validation failed: Description and Status can't be blank/)
       end
     end
   end
 
-
   # Test suite for PUT /tasks/:id
   describe 'PUT /tasks/:id' do
-    let(:valid_attributes) { { description: 'my_task', status: 'to-do'} }
+    let(:valid_attributes) { { description: 'my_task', status: 'to-do' } }
 
     context 'when the record exists' do
       before { put "/tasks/#{task_id}", params: valid_attributes }

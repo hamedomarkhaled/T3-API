@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class TeamsController < ApplicationController
-  before_action :set_team, only: [:show, :update, :destroy]
+  before_action :set_team, only: %i[show update destroy]
 
   def index
     @teams = Team.all
@@ -36,6 +38,6 @@ class TeamsController < ApplicationController
   end
 
   def team_includes
-    [:users => { :include => :tasks }]
+    [users: { include: :tasks }]
   end
 end

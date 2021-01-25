@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# module foe handling active record exceptions
 module ExceptionHandler
   # provides the more graceful `included` method
   extend ActiveSupport::Concern

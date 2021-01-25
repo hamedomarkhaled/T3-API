@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
-  #init test data
+  # init test data
   let(:users) { create_list(:user, 10) }
   let(:user_id) { users.first.id }
 
@@ -21,7 +23,7 @@ RSpec.describe 'Users API', type: :request do
 
   # Test suite for GET /users/:id
   describe 'GET /users/:id' do
-    before { get '/users/#{user_id}' }
+    before { get "/users/#{user_id}" }
 
     context 'when the record exists' do
       it 'returns the user' do
@@ -38,7 +40,7 @@ RSpec.describe 'Users API', type: :request do
   # Test suite for POST /users
   describe 'POST /users' do
     # valid payload
-    let(:valid_attributes) { { first_name: 'omar', last_name: 'hamed', email: 'omar.hamed@yahoo.com'} }
+    let(:valid_attributes) { { first_name: 'omar', last_name: 'hamed', email: 'omar.hamed@yahoo.com' } }
 
     context 'when the request is valid' do
       before { post '/users', params: valid_attributes }
@@ -63,15 +65,14 @@ RSpec.describe 'Users API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-            .to match(/Validation failed: First Name email and Last Name Can't be blank/)
+          .to match(/Validation failed: First Name email and Last Name Can't be blank/)
       end
     end
   end
 
-
   # Test suite for PUT /users/:id
   describe 'PUT /users/:id' do
-    let(:valid_attributes) { { first_name: 'omar', last_name: 'hamed', email: 'omar.hamed@yahoo.com'} }
+    let(:valid_attributes) { { first_name: 'omar', last_name: 'hamed', email: 'omar.hamed@yahoo.com' } }
 
     context 'when the record exists' do
       before { put "/users/#{user_id}", params: valid_attributes }
