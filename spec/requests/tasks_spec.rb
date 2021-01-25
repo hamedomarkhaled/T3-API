@@ -40,14 +40,14 @@ RSpec.describe 'Tasks API', type: :request do
   # Test suite for POST /tasks
   describe 'POST /tasks' do
     # valid payload
-    let(:valid_attributes) { { description: 'my_task', status: 'to-do' } }
+    let!(:valid_attributes) { { description: 'my_task', status: 'to-do', user_id: 1 } }
 
     context 'when the request is valid' do
       before { post '/tasks', params: valid_attributes }
 
       it 'creates a task' do
-        expect(json['description']).to eq('my_task')
-        expect(json['status']).to eq('to-do')
+        expect(json[:description]).to eq('my_task')
+        expect(json[:status]).to eq('to-do')
       end
 
       it 'returns status code 201' do
@@ -64,14 +64,14 @@ RSpec.describe 'Tasks API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: Description and Status can't be blank/)
+          .to match(/Validation failed: User must exist, Description can't be blank, Status can't be blank/)
       end
     end
   end
 
   # Test suite for PUT /tasks/:id
   describe 'PUT /tasks/:id' do
-    let(:valid_attributes) { { description: 'my_task', status: 'to-do' } }
+    let!(:valid_attributes) { { description: 'my_task_updated', status: 'to-do', user_id: 1 } }
 
     context 'when the record exists' do
       before { put "/tasks/#{task_id}", params: valid_attributes }

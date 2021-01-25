@@ -4,10 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
   # init test data
-  let(:tasks) {create_list(:task, 10)}
+  let(:tasks) { create_list(:task, 10) }
   let!(:users) { create_list(:user, 10) }
   let(:user_id) { users.first.id }
-  let(:user_with_tasks) { {first_name: "user", last_name: "test", email: "user_test@yahoo.com", tasks: tasks} }
+  let(:user_with_tasks) { { first_name: 'user', last_name: 'test', email: 'user_test@yahoo.com', tasks: tasks } }
 
   # Test suite for GET /users
   describe 'GET /users' do

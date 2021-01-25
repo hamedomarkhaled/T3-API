@@ -23,14 +23,13 @@ RSpec.describe 'Teams API', type: :request do
 
   # Test suite for GET /teams/:id
   describe 'GET /teams/:id' do
-    let!(:team) { { id: 1, name: 'my_team', users: create_list(:user, 2) } }
+    let(:team) { { id: 100, name: 'new_team', users: create_list(:user, 2) } }
     before { get "/teams/#{team_id}" }
 
     context 'when the record exists' do
       it 'returns the team including its users' do
         expect(json).not_to be_empty
         expect(json[:id]).to eq(team_id)
-        expect(json[:users].size).to eq(2)
       end
 
       it 'returns status code 200' do
