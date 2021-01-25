@@ -4,8 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
   # init test data
-  let(:users) { create_list(:user, 10) }
+  let(:tasks) {create_list(:task, 10)}
+  let!(:users) { create_list(:user, 10) }
   let(:user_id) { users.first.id }
+  let(:user_with_tasks) { {first_name: "user", last_name: "test", email: "user_test@yahoo.com", tasks: tasks} }
 
   # Test suite for GET /users
   describe 'GET /users' do
@@ -46,9 +48,9 @@ RSpec.describe 'Users API', type: :request do
       before { post '/users', params: valid_attributes }
 
       it 'creates a user' do
-        expect(json['first_name']).to eq('omar')
-        expect(json['last_name']).to eq('hamed')
-        expect(json['email']).to eq('omar.hamed@yahoo.com')
+        expect(json[:first_name]).to eq('omar')
+        expect(json[:last_name]).to eq('hamed')
+        expect(json[:email]).to eq('omar.hamed@yahoo.com')
       end
 
       it 'returns status code 201' do
@@ -65,7 +67,7 @@ RSpec.describe 'Users API', type: :request do
 
       it 'returns a validation failure message' do
         expect(response.body)
-          .to match(/Validation failed: First Name email and Last Name Can't be blank/)
+          .to match(/Validation failed: First name can't be blank, Last name can't be blank, Email can't be blank/)
       end
     end
   end
