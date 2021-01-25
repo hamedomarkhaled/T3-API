@@ -12,7 +12,7 @@ class TeamsController < ApplicationController
   end
 
   def show
-    json_response(@team)
+    json_response(@team, :ok, team_includes)
   end
 
   def update
@@ -33,5 +33,9 @@ class TeamsController < ApplicationController
 
   def set_team
     @team = Team.find(params[:id])
+  end
+
+  def team_includes
+    [:users => { :include => :tasks }]
   end
 end

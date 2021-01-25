@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe 'Teams API', type :request do
+RSpec.describe 'Teams API', type: :request do
   #init test data
-  let(:teams) { create_list(:team, 10) }
+  let!(:teams) { create_list(:team, 10) }
   let(:team_id) { teams.first.id }
 
   # Test suite for GET /teams
@@ -21,12 +21,14 @@ RSpec.describe 'Teams API', type :request do
 
   # Test suite for GET /teams/:id
   describe 'GET /teams/:id' do
-    before { get '/teams/#{team_id}' }
+    let!(:team) { {id: 1, name: "my_team", users: create_list(:user, 2)} }
+    before { get "/teams/#{team_id}" }
 
     context 'when the record exists' do
-      it 'returns the team' do
+      it 'returns the team including its users' do
         expect(json).not_to be_empty
         expect(json[:id]).to eq(team_id)
+        expect(json[:users].size).to eq(2)
       end
 
       it 'returns status code 200' do
@@ -38,14 +40,15 @@ RSpec.describe 'Teams API', type :request do
   # Test suite for POST /teams
   describe 'POST /teams' do
     # valid payload
-    let(:valid_attributes) { { name: 'my_team' } }
+    let(:valid_attributes) { { name: 'my_team', users: create_list(:user, 10)} }
 
     context 'when the request is valid' do
       before { post '/teams', params: valid_attributes }
 
-      it 'creates a team' do
-        expect(json['name']).to eq('my_team')
+      it 'creates a team with name' do
+        expect(json[:name]).to eq('my_team')
       end
+
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)

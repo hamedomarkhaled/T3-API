@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Tasks API', type :request do
+RSpec.describe 'Tasks API', type: :request do
   #init test data
   let(:tasks) { create_list(:task, 10) }
   let(:task_id) { tasks.first.id }
