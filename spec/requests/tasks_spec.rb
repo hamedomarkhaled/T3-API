@@ -4,16 +4,17 @@ require 'rails_helper'
 
 RSpec.describe 'Tasks API', type: :request do
   # init test data
-  let!(:tasks) { create_list(:task, 10) }
-  let(:task_id) { tasks.first.id }
+  let(:user) { create(:user) }
+  let(:task_id) { user.tasks.first.id }
+  let(:headers) { valid_headers }
 
   # Test suite for GET /tasks
   describe 'GET /tasks' do
-    before { get '/tasks' }
+    before { get '/tasks', params: {}, headers: headers }
 
     it 'returns tasks' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(10)
+      expect(json.size).to eq(2)
     end
 
     it 'returns status code 200' do
@@ -23,7 +24,7 @@ RSpec.describe 'Tasks API', type: :request do
 
   # Test suite for GET /tasks/:id
   describe 'GET /tasks/:id' do
-    before { get "/tasks/#{task_id}" }
+    before { get "/tasks/#{task_id}", params: {}, headers: headers }
 
     context 'when the record exists' do
       it 'returns the task' do
@@ -43,7 +44,7 @@ RSpec.describe 'Tasks API', type: :request do
     let!(:valid_attributes) { { description: 'my_task', status: 'to-do', user_id: 1 } }
 
     context 'when the request is valid' do
-      before { post '/tasks', params: valid_attributes }
+      before { post '/tasks', params: valid_attributes, headers: headers }
 
       it 'creates a task' do
         expect(json[:description]).to eq('my_task')
@@ -56,7 +57,7 @@ RSpec.describe 'Tasks API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/tasks', params: {} }
+      before { post '/tasks', params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -74,7 +75,7 @@ RSpec.describe 'Tasks API', type: :request do
     let!(:valid_attributes) { { description: 'my_task_updated', status: 'to-do', user_id: 1 } }
 
     context 'when the record exists' do
-      before { put "/tasks/#{task_id}", params: valid_attributes }
+      before { put "/tasks/#{task_id}", params: valid_attributes, headers: headers }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -88,7 +89,7 @@ RSpec.describe 'Tasks API', type: :request do
 
   # Test suite for DELETE /tasks/:id
   describe 'DELETE /tasks/:id' do
-    before { delete "/tasks/#{task_id}" }
+    before { delete "/tasks/#{task_id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

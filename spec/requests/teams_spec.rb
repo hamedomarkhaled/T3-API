@@ -4,12 +4,14 @@ require 'rails_helper'
 
 RSpec.describe 'Teams API', type: :request do
   # init test data
+  let(:user) { create(:user) }
   let!(:teams) { create_list(:team, 10) }
   let(:team_id) { teams.first.id }
+  let(:headers) { valid_headers }
 
   # Test suite for GET /teams
   describe 'GET /teams' do
-    before { get '/teams' }
+    before { get '/teams', params: {}, headers: headers }
 
     it 'returns teams' do
       expect(json).not_to be_empty
@@ -24,7 +26,7 @@ RSpec.describe 'Teams API', type: :request do
   # Test suite for GET /teams/:id
   describe 'GET /teams/:id' do
     let(:team) { { id: 100, name: 'new_team', users: create_list(:user, 2) } }
-    before { get "/teams/#{team_id}" }
+    before { get "/teams/#{team_id}", params: {}, headers: headers }
 
     context 'when the record exists' do
       it 'returns the team including its users' do
@@ -44,7 +46,7 @@ RSpec.describe 'Teams API', type: :request do
     let(:valid_attributes) { { name: 'my_team', users: create_list(:user, 10) } }
 
     context 'when the request is valid' do
-      before { post '/teams', params: valid_attributes }
+      before { post '/teams', params: valid_attributes, headers: headers }
 
       it 'creates a team with name' do
         expect(json[:name]).to eq('my_team')
@@ -74,7 +76,7 @@ RSpec.describe 'Teams API', type: :request do
     let(:valid_attributes) { { name: 'my_name_edited' } }
 
     context 'when the record exists' do
-      before { put "/teams/#{team_id}", params: valid_attributes }
+      before { put "/teams/#{team_id}", params: valid_attributes, headers: headers }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -88,7 +90,7 @@ RSpec.describe 'Teams API', type: :request do
 
   # Test suite for DELETE /teams/:id
   describe 'DELETE /todos/:id' do
-    before { delete "/teams/#{team_id}" }
+    before { delete "/teams/#{team_id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

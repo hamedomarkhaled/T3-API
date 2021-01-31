@@ -10,6 +10,8 @@ class TeamsController < ApplicationController
 
   def create
     @team = Team.create!(team_params)
+    current_user.team_id = @team.identical?
+    current_user.save
     json_response(@team, :created)
   end
 
@@ -34,6 +36,8 @@ class TeamsController < ApplicationController
   end
 
   def set_team
+    raise ExceptionHandler::AuthenticationError if params[:id] != current_user.team_id
+
     @team = Team.find(params[:id])
   end
 
