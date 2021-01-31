@@ -10,7 +10,7 @@ class TeamsController < ApplicationController
 
   def create
     @team = Team.create!(team_params)
-    current_user.team_id = @team.identical?
+    current_user.team_id = @team.id
     current_user.save
     json_response(@team, :created)
   end
@@ -36,9 +36,16 @@ class TeamsController < ApplicationController
   end
 
   def set_team
-    raise ExceptionHandler::AuthenticationError if params[:id] != current_user.team_id
+    raise ExceptionHandler::AuthenticationError unless user_team_member?
 
     @team = Team.find(params[:id])
+  end
+
+  def user_team_member?
+    processed_team = Team.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless processed_team
+
+    processed_team.users.include?(current_user)
   end
 
   def team_includes

@@ -5,7 +5,8 @@ require 'rails_helper'
 RSpec.describe 'Tasks API', type: :request do
   # init test data
   let(:user) { create(:user) }
-  let(:task_id) { user.tasks.first.id }
+  let!(:task) { create_list(:task, 10, user_id: user.id) }
+  let(:task_id) { task.first.id }
   let(:headers) { valid_headers }
 
   # Test suite for GET /tasks
@@ -14,14 +15,14 @@ RSpec.describe 'Tasks API', type: :request do
 
     it 'returns tasks' do
       expect(json).not_to be_empty
-      expect(json.size).to eq(2)
+      expect(json.size).to eq(10)
     end
 
     it 'returns status code 200' do
       expect(response).to have_http_status(200)
     end
   end
-
+  #
   # Test suite for GET /tasks/:id
   describe 'GET /tasks/:id' do
     before { get "/tasks/#{task_id}", params: {}, headers: headers }
@@ -41,7 +42,7 @@ RSpec.describe 'Tasks API', type: :request do
   # Test suite for POST /tasks
   describe 'POST /tasks' do
     # valid payload
-    let!(:valid_attributes) { { description: 'my_task', status: 'to-do', user_id: 1 } }
+    let!(:valid_attributes) { { description: 'my_task', status: 'to-do', user_id: user.id }.to_json }
 
     context 'when the request is valid' do
       before { post '/tasks', params: valid_attributes, headers: headers }
@@ -70,9 +71,9 @@ RSpec.describe 'Tasks API', type: :request do
     end
   end
 
-  # Test suite for PUT /tasks/:id
+  # # Test suite for PUT /tasks/:id
   describe 'PUT /tasks/:id' do
-    let!(:valid_attributes) { { description: 'my_task_updated', status: 'to-do', user_id: 1 } }
+    let!(:valid_attributes) { { description: 'my_task_updated', status: 'to-do', user_id: user.id }.to_json }
 
     context 'when the record exists' do
       before { put "/tasks/#{task_id}", params: valid_attributes, headers: headers }

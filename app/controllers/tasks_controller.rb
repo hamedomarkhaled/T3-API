@@ -4,8 +4,7 @@ class TasksController < ApplicationController
   before_action :set_task, only: %i[show update destroy]
 
   def index
-    @tasks = current_user.tasks
-    json_response(@tasks)
+    json_response(Task.where(user_id: current_user.id))
   end
 
   def create
@@ -36,7 +35,7 @@ class TasksController < ApplicationController
   end
 
   def set_task
-    raise ExceptionHandler::AuthenticationError if Task.find(params[:id].user_id != current_user.id)
+    raise ExceptionHandler::AuthenticationError if Task.find(params[:id]).user_id != current_user.id
 
     @task = Task.find(params[:id])
   end

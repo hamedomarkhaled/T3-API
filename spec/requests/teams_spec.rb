@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Teams API', type: :request do
   # init test data
-  let(:user) { create(:user) }
   let!(:teams) { create_list(:team, 10) }
   let(:team_id) { teams.first.id }
+  let(:user) { create(:user, team_id: team_id) }
   let(:headers) { valid_headers }
 
   # Test suite for GET /teams
@@ -43,7 +43,7 @@ RSpec.describe 'Teams API', type: :request do
   # Test suite for POST /teams
   describe 'POST /teams' do
     # valid payload
-    let(:valid_attributes) { { name: 'my_team', users: create_list(:user, 10) } }
+    let(:valid_attributes) { { name: 'my_team', users: create_list(:user, 10) }.to_json }
 
     context 'when the request is valid' do
       before { post '/teams', params: valid_attributes, headers: headers }
@@ -58,7 +58,7 @@ RSpec.describe 'Teams API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/teams', params: {} }
+      before { post '/teams', params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -73,7 +73,7 @@ RSpec.describe 'Teams API', type: :request do
 
   # Test suite for PUT /teams/:id
   describe 'PUT /teams/:id' do
-    let(:valid_attributes) { { name: 'my_name_edited' } }
+    let(:valid_attributes) { { name: 'my_name_edited' }.to_json }
 
     context 'when the record exists' do
       before { put "/teams/#{team_id}", params: valid_attributes, headers: headers }
