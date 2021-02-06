@@ -24,6 +24,10 @@ gem 'puma', '~> 4.1'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
+# gem bcrypt for validating user passwords
+gem 'bcrypt', '~> 3.1', '>= 3.1.12'
+gem 'jwt'
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
